@@ -13,7 +13,6 @@ import { useRouter } from "expo-router";
 import { SocialAuthButtons } from "@/components/SocialAuthButtons";
 import { login } from "@/lib/auth";
 import { LinearGradient } from "expo-linear-gradient";
-import { Feather } from "@expo/vector-icons";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -30,7 +29,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await login({ phone, password });
-      router.replace("/home");
+      router.replace("/(app)/(tabs)");
     } catch (err: any) {
       const message =
         err?.response?.data?.message || "Invalid phone number or password.";
@@ -83,11 +82,9 @@ export default function LoginScreen() {
               className="flex-1 text-slate-800 text-base"
             />
             <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)}>
-              <Feather
-                name={showPassword ? "eye" : "eye-off"}
-                size={20}
-                color="#94a3b8"
-              />
+              <Text className="text-slate-400">
+                {showPassword ? "👁️" : "👁️‍🗨️"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

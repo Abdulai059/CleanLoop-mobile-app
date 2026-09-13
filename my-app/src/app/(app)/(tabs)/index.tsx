@@ -7,7 +7,7 @@ export default function HomeScreen() {
 
   async function handleLogout() {
     await SecureStore.deleteItemAsync("authToken");
-    router.replace("/login");
+    router.replace("/(auth)/login");
   }
 
   return (

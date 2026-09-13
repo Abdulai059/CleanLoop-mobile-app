@@ -31,7 +31,7 @@ export default function SignUpScreen() {
     setLoading(true);
     try {
       await signup({ phone, password, confirmPassword });
-      router.replace("/home");
+      router.replace("/(app)/(tabs)");
     } catch (err: any) {
       const message =
         err?.response?.data?.message || "Something went wrong. Try again.";

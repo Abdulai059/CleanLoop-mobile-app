@@ -4,49 +4,41 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
 
-// 1. Import your tailwind directives from your src directory
 import "../global.css";
 
-// Prevent the splash screen from auto-hiding before assets load
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   useEffect(() => {
-    // Hide the splash screen once the app mounting logic completes
     SplashScreen.hideAsync();
   }, []);
 
   return (
     <>
-      {/* Dynamic status bar reflecting your device theme status */}
-      <StatusBar
-        style={colorScheme === "dark" ? "light" : "dark"}
-      />
+      <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
 
-      {/* Global Application Router Navigation Structure */}
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: colorScheme === "dark" ? "#0f172a" : "#ffffff", // slate-900 or white
+            backgroundColor: colorScheme === "dark" ? "#0f172a" : "#ffffff",
           },
-          headerTintColor: colorScheme === "dark" ? "#f8fafc" : "#0f172a", // slate-50 or slate-900
+          headerTintColor: colorScheme === "dark" ? "#f8fafc" : "#0f172a",
           headerTitleStyle: {
             fontWeight: "bold",
           },
           contentStyle: {
-            backgroundColor: colorScheme === "dark" ? "#0f172a" : "#f8fafc", // Background system canvas
+            backgroundColor: colorScheme === "dark" ? "#0f172a" : "#f8fafc",
           },
-          headerShadowVisible: false, // Clean borderless layout look
+          headerShadowVisible: false,
         }}
       >
-        {/* The Welcome/Splash Screen - Overriding configuration for full viewport stretch */}
+        {/* The Welcome/Splash Screen */}
         <Stack.Screen
           name="index"
           options={{
             headerShown: false,
-            // 👇 Added layout parameter metrics to fix the centering constraints globally
             contentStyle: {
               backgroundColor: "transparent",
               flex: 1,
@@ -56,21 +48,11 @@ export default function RootLayout() {
           }}
         />
 
-        {/* The Login Screen - Custom Header Hidden */}
-        <Stack.Screen
-          name="login"
-          options={{
-            headerShown: false,
-          }}
-        />
+        {/* Auth group (login, signup) */}
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
-        {/* The Signup Screen - Custom Header Hidden */}
-        <Stack.Screen
-          name="signup"
-          options={{
-            headerShown: false,
-          }}
-        />
+        {/* App group — protected routes */}
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
       </Stack>
     </>
   );
