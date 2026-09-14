@@ -1,9 +1,11 @@
-import HomeHeader from "@/components/HomeHeader";
-import MaterialsList from "@/components/MaterialsList";
-import PromoBanner from "@/components/PromoBanner";
-import RewardsSection from "@/components/RewardsSection";
-import SectionHeader from "@/components/SectionHeader";
 import { ScrollView } from "react-native";
+import { useMe } from "@/hooks/useMe";
+
+import HomeHeader from "@/components/HomeHeader";
+import PromoBanner from "@/components/PromoBanner";
+import SectionHeader from "@/components/SectionHeader";
+import MaterialsList from "@/components/MaterialsList";
+import RewardsSection from "@/components/RewardsSection";
 
 export default function HomeScreen() {
   return (
@@ -12,7 +14,7 @@ export default function HomeScreen() {
       contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
-      <HomeHeader name="Susu" />
+      <HomeHeader />
       <PromoBanner />
 
       <SectionHeader title="Quick Actions" />
