@@ -1,59 +1,60 @@
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ActivityIndicator,
+} from "react-native";
+import { useRewards } from "@/hooks/useRewards";
 
-const rewards = [
-  {
-    title: "Frytol Oil",
-    points: "1,500 pts",
-    image: require("../../assets/rewards/frytol01.png"),
-    bg: "bg-green-50",
-  },
-  {
-    title: "Books",
-    points: "800 pts",
-    image: require("../../assets/rewards/books01.png"),
-    bg: "bg-yellow-50",
-  },
-  {
-    title: "Flask",
-    points: "1,200 pts",
-    image: require("../../assets/rewards/flask01.png"),
-    bg: "bg-pink-50",
-  },
-  {
-    title: "Pen & Pencil",
-    points: "500 pts",
-    image: require("../../assets/rewards/pens-pencil.png"),
-    bg: "bg-sky-50",
-  },
-  {
-    title: "Bag",
-    points: "2,000 pts",
-    image: require("../../assets/rewards/bag01.png"),
-    bg: "bg-purple-50",
-  },
+
+const BG_COLORS = [
+  "bg-sky-50",
+  "bg-yellow-50",
+  "bg-pink-50",
+  "bg-green-50",
+  "bg-purple-50",
 ];
 
 export default function RewardsSection() {
+  const { data: rewards, isLoading, error } = useRewards();
+
+  if (isLoading) {
+    return (
+      <View className="py-10 items-center">
+        <ActivityIndicator color="#16a34a" />
+      </View>
+    );
+  }
+
+  if (error || !rewards) {
+    return (
+      <View className="py-10 items-center">
+        <Text className="text-slate-500">Couldn't load rewards.</Text>
+      </View>
+    );
+  }
+
   return (
     <View className="flex-row flex-wrap gap-3.5">
       {rewards.map((item, index) => (
         <TouchableOpacity
-          key={index}
-          className={`w-[48%] ${item.bg} rounded-2xl p-4 items-center`}
+          key={item.id}
+          className={`w-[48%] ${BG_COLORS[index % BG_COLORS.length]} rounded-2xl p-4 items-center`}
         >
           <View className="w-24 h-24 mb-3 rounded-xl overflow-hidden items-center justify-center">
             <Image
-              source={item.image}
+              source={{ uri: item.imageUrl }}
               className="w-full h-full"
               resizeMode="contain"
             />
           </View>
 
           <Text className="text-sm font-bold text-slate-900 mb-1 text-center">
-            {item.title}
+            {item.name}
           </Text>
           <Text className="text-xs text-slate-500 font-medium">
-            {item.points}
+            {item.pointsCost} pts
           </Text>
         </TouchableOpacity>
       ))}

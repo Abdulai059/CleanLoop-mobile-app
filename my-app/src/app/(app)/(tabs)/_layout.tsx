@@ -29,7 +29,7 @@ export default function TabsLayout() {
             shadowOpacity: 0,
           },
           tabBarLabelStyle: {
-            fontSize: 11,
+            fontSize: 10,
             fontWeight: "600",
           },
         }}
@@ -39,7 +39,7 @@ export default function TabsLayout() {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="home" size={22} color={color} />
+              <FontAwesome name="home" size={21} color={color} />
             ),
           }}
         />
@@ -48,7 +48,7 @@ export default function TabsLayout() {
           options={{
             title: "Recoveries",
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="recycle" size={22} color={color} />
+              <FontAwesome name="recycle" size={21} color={color} />
             ),
           }}
         />
@@ -57,7 +57,7 @@ export default function TabsLayout() {
           options={{
             title: "Wallet",
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="credit-card" size={22} color={color} />
+              <FontAwesome name="credit-card" size={21} color={color} />
             ),
           }}
         />
@@ -66,7 +66,7 @@ export default function TabsLayout() {
           options={{
             title: "Profile",
             tabBarIcon: ({ color }) => (
-              <FontAwesome name="user" size={22} color={color} />
+              <FontAwesome name="user" size={21} color={color} />
             ),
           }}
         />
