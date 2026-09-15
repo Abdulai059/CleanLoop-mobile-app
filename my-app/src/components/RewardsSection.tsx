@@ -1,11 +1,6 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { useRewards } from "@/hooks/useRewards";
+import { RewardCardSkeleton } from "./ui/Skeleton/RewardCardSkeleton";
 
 
 const BG_COLORS = [
@@ -21,8 +16,10 @@ export default function RewardsSection() {
 
   if (isLoading) {
     return (
-      <View className="py-10 items-center">
-        <ActivityIndicator color="#16a34a" />
+      <View className="flex-row flex-wrap gap-3.5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <RewardCardSkeleton key={i} />
+        ))}
       </View>
     );
   }
