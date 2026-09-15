@@ -13,6 +13,7 @@ import { useRouter } from "expo-router";
 import { SocialAuthButtons } from "@/components/SocialAuthButtons";
 import { login } from "@/lib/auth";
 import { LinearGradient } from "expo-linear-gradient";
+import { getMyHousehold } from "@/lib/household";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -21,23 +22,29 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  async function handleLogin() {
-    if (!phone || !password) {
-      Alert.alert("Missing fields", "Please enter your phone and password.");
-      return;
-    }
-    setLoading(true);
-    try {
-      await login({ phone, password });
-      router.replace("/(app)/(tabs)");
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.message || "Invalid phone number or password.";
-      Alert.alert("Login failed", message);
-    } finally {
-      setLoading(false);
-    }
-  }
+ async function handleLogin() {
+   if (!phone || !password) {
+     Alert.alert("Missing fields", "Please enter your phone and password.");
+     return;
+   }
+   setLoading(true);
+   try {
+     await login({ phone, password });
+
+     try {
+       await getMyHousehold();
+       router.replace("/(app)/(tabs)");
+     } catch {
+       router.replace("/(onboarding)/location");
+     }
+   } catch (err: any) {
+     const message =
+       err?.response?.data?.message || "Invalid phone number or password.";
+     Alert.alert("Login failed", message);
+   } finally {
+     setLoading(false);
+   }
+ }
 
   return (
     <View className="flex-1 bg-[#f7f9fc] px-8 pt-16 justify-between pb-12">

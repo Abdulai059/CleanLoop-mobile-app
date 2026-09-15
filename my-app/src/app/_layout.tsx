@@ -55,6 +55,8 @@ export default function RootLayout() {
           {/* Auth group (login, signup) */}
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
+          <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
+
           {/* App group — protected routes */}
           <Stack.Screen name="(app)" options={{ headerShown: false }} />
         </Stack>
