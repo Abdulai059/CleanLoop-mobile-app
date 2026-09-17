@@ -11,11 +11,10 @@ export type Household = {
 };
 
 export type CreateHouseholdPayload = {
-  regionId: string;
-  districtId: string;
+  name: string;
   communityId: string;
-  address: string;
-  // ⚠️ guessing these field names — confirm against createHouseholdSchema
+  latitude?: number;
+  longitude?: number;
 };
 
 export async function createHousehold(

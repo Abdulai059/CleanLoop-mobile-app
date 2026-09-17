@@ -32,7 +32,9 @@ export default function UserInfo({ user, onPress }: Props) {
         </View>
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color="#94a3b8" />
+      <TouchableOpacity onPress={onPress} hitSlop={10}>
+        <Ionicons name="chevron-forward" size={18} color="#94a3b8" />
+      </TouchableOpacity>
     </TouchableOpacity>
   );
 }
