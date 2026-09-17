@@ -18,7 +18,9 @@ export async function getRewards(): Promise<Reward[]> {
   return data?.data ?? [];
 }
 
-export async function getRewardById(rewardId: string): Promise<Reward> {
+export async function getReward(rewardId: string): Promise<Reward> {
   const { data } = await api.get(`/rewards/${rewardId}`);
   return data.data;
 }
+
+

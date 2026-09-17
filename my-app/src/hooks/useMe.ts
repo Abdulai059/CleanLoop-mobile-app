@@ -6,6 +6,6 @@ export function useMe() {
   return useQuery({
     queryKey: ["me"],
     queryFn: getMe,
-    staleTime: 1000 * 60 * 5, // cache for 5 minutes
+    staleTime: 0, // cache for 0 minutes
   });
 }
