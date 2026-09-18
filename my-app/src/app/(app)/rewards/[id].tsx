@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { getReward } from "@/lib/rewards";
-import { getWallet } from "@/lib/wallet";
+import { getMyWallet } from "@/lib/wallet";
 import { createRedemption } from "@/lib/redemptions";
 import { Ionicons } from "@expo/vector-icons";
 import RewardDetailSkeleton from "@/components/ui/Skeleton/RewardDetailSkeleton";
@@ -31,7 +31,7 @@ export default function RewardDetailScreen() {
 
   const { data: wallet, isLoading: loadingWallet } = useQuery({
     queryKey: ["wallet"],
-    queryFn: getWallet,
+    queryFn: getMyWallet,
   });
 
   const balance = wallet?.balance ?? 0;
@@ -68,9 +68,9 @@ export default function RewardDetailScreen() {
     }
   }
 
- if (loadingReward || loadingWallet) {
-   return <RewardDetailSkeleton />;
- }
+  if (loadingReward || loadingWallet) {
+    return <RewardDetailSkeleton />;
+  }
 
   if (!reward) {
     return (
@@ -180,7 +180,7 @@ export default function RewardDetailScreen() {
           ) : (
             <Text
               className={`font-bold text-base ${
-                canRedeem ? "text-slate-900" : "text-slate-600"
+                canRedeem ? "text-white" : "text-slate-600"
               }`}
             >
               Redeem

@@ -15,7 +15,7 @@ export default function AppLayout() {
       }
     }
     checkAuth();
-  }, []);
+  }, [router]);
 
   return (
     <Stack
