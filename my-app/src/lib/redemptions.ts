@@ -4,7 +4,7 @@ import { api } from "./api";
 export type Redemption = {
   id: string;
   status: string;
-  pointsUsed: number;
+  pointsSpent: number;
   createdAt: string;
   reward: {
     id: string;
@@ -15,7 +15,7 @@ export type Redemption = {
 
 export async function createRedemption(rewardId: string): Promise<Redemption> {
   const { data } = await api.post("/redemptions", { rewardId });
-  return data.data.redemption;
+  return data.data;
 }
 
 export async function getMyRedemptions(): Promise<Redemption[]> {

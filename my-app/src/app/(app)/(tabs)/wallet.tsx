@@ -1,13 +1,9 @@
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  RefreshControl,
-} from "react-native";
+import { View, Text, FlatList, RefreshControl } from "react-native";
+import { useState } from "react";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletTransactions } from "@/hooks/useWalletTransactions";
-import { useState } from "react";
+import WalletSkeleton from "@/components/ui/Skeleton/WalletSkeleton";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function WalletScreen() {
   const {
@@ -29,52 +25,33 @@ export default function WalletScreen() {
   };
 
   if (walletLoading) {
-    return (
-      <View className="flex-1 items-center justify-center bg-slate-50">
-        <ActivityIndicator size="large" color="#16a34a" />
-        <Text className="text-slate-500 mt-3 text-sm">Loading wallet...</Text>
-      </View>
-    );
+    return <WalletSkeleton />;
   }
 
-  const formatAmount = (amount: number | string) => {
-    return Number(amount).toLocaleString();
+  const formatAmount = (value: number | string) =>
+    Number(value).toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+
+  const formatDate = (date?: string | Date) => {
+    if (!date) return "";
+    return new Date(date).toLocaleDateString(undefined, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
   };
 
-  const getTypeLabel = (type: string) => {
-    switch (type) {
-      case "EARN":
-        return "Earned";
-      case "REDEEM":
-        return "Redeemed";
-      case "ADJUSTMENT":
-        return "Adjustment";
-      case "REVERSAL":
-        return "Reversal";
-      default:
-        return type;
-    }
-  };
-
-  const getTypeColor = (type: string) => {
-    if (type === "EARN") return "text-emerald-600";
-    if (type === "REDEEM") return "text-rose-600";
-    return "text-slate-700";
-  };
-
-  const getTypeBg = (type: string) => {
-    if (type === "EARN") return "bg-emerald-50";
-    if (type === "REDEEM") return "bg-rose-50";
-    return "bg-slate-100";
-  };
+  const isPositive = (type: string) => type === "EARN";
 
   return (
-    <View className="flex-1 bg-slate-50">
+    <View className="flex-1 bg-[#F8FAFC]">
       {/* Header */}
-      <View className="bg-white pt-14 pb-4 px-5 border-b border-slate-100">
-        <Text className="text-2xl font-bold text-slate-900">My Wallet</Text>
-        <Text className="text-slate-500 text-sm mt-0.5">
-          Track your points & activity
+      <View className=" pt-14 pb-4 px-5 border-b border-slate-100">
+        <Text className="text-[22px] font-semibold text-slate-900">Wallet</Text>
+        <Text className="text-slate-500 text-[13px] mt-0.5">
+          Points balance & history
         </Text>
       </View>
 
@@ -82,56 +59,46 @@ export default function WalletScreen() {
         data={transactions || []}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 40 }}
+        contentContainerStyle={{ paddingBottom: 48 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#16a34a"
+            tintColor="#059669"
           />
         }
         ListHeaderComponent={
-          <View className="px-5 pt-5">
+          <View className="px-5 pt-6">
             {/* Balance Card */}
-            <View className="bg-green-600 rounded-3xl p-6 mb-6 shadow-lg shadow-emerald-200">
-              <View className="flex-row items-center justify-between">
-                <View>
-                  <Text className="text-emerald-100 text-sm font-medium">
-                    Available Balance
-                  </Text>
-                  <Text className="text-white text-4xl font-bold mt-1 tracking-tight">
-                    {formatAmount(wallet?.balance ?? 0)}
-                  </Text>
-                  <Text className="text-emerald-100 text-base mt-0.5 font-medium">
-                    PTS
-                  </Text>
-                </View>
+            <View className="bg-green-100 rounded-3xl p-6 mb-8 border border-slate-100 shadow-sm">
+              <Text className="text-slate-500 text-[13px] font-medium mb-1.5">
+                Available balance
+              </Text>
 
-                {/* Decorative circle */}
-                <View className="w-16 h-16 rounded-full bg-white/15 items-center justify-center">
-                  <Text className="text-white text-2xl font-bold">★</Text>
-                </View>
+              <View className="flex-row items-end">
+                <Text className="text-slate-900 text-[42px] font-semibold tracking-tight leading-none">
+                  {formatAmount(wallet?.balance ?? 0)}
+                </Text>
+                <Text className="text-slate-400 text-lg font-medium ml-2 mb-1.5">
+                  PTS
+                </Text>
               </View>
 
-              <View className="mt-5 pt-4 border-t border-white/20 flex-row justify-between">
-                <Text className="text-emerald-100 text-xs">
-                  Points you can redeem
-                </Text>
-                <Text className="text-white text-xs font-semibold">
-                  Keep collecting!
+              <View className="mt-5 pt-4 border-t border-slate-100">
+                <Text className="text-slate-400 text-xs">
+                  Ready to redeem anytime
                 </Text>
               </View>
             </View>
 
-            {/* Section Title */}
-            <View className="flex-row items-center justify-between mb-4">
-              <Text className="text-lg font-bold text-slate-900">
-                Recent Activity
+            {/* Section title */}
+            <View className="flex-row items-center justify-between mb-3.5">
+              <Text className="text-[15px] font-semibold text-slate-900">
+                Recent transactions
               </Text>
               {transactions && transactions.length > 0 && (
-                <Text className="text-sm text-slate-500">
-                  {transactions.length} transaction
-                  {transactions.length !== 1 ? "s" : ""}
+                <Text className="text-slate-400 text-xs">
+                  {transactions.length}
                 </Text>
               )}
             </View>
@@ -139,80 +106,86 @@ export default function WalletScreen() {
         }
         ListEmptyComponent={
           !txLoading ? (
-            <View className="items-center justify-center py-16 px-8">
-              <View className="w-20 h-20 rounded-full bg-slate-100 items-center justify-center mb-4">
-                <Text className="text-3xl">📭</Text>
+            <View className="items-center py-20 px-10">
+              <View className="w-14 h-14 rounded-full bg-slate-100 items-center justify-center mb-4">
+                <AntDesign name="swap" size={22} color="#94A3B8" />
               </View>
-              <Text className="text-slate-900 font-semibold text-base">
+              <Text className="text-slate-900 font-semibold text-[15px]">
                 No transactions yet
               </Text>
-              <Text className="text-slate-500 text-sm text-center mt-1 leading-5">
-                Your earnings and redemptions will appear here once you start
-                collecting.
+              <Text className="text-slate-500 text-sm text-center mt-1.5 leading-5">
+                Your earnings and redemptions will appear here.
               </Text>
             </View>
           ) : null
         }
-        renderItem={({ item }) => (
-          <View className="mx-5 mb-3">
-            <View className="bg-white rounded-2xl px-4 py-4 flex-row items-center border border-slate-100 shadow-sm shadow-slate-100">
-              {/* Type Badge */}
-              <View
-                className={`w-11 h-11 rounded-xl items-center justify-center mr-3.5 ${getTypeBg(item.type)}`}
-              >
-                <Text
-                  className={`text-lg font-bold ${getTypeColor(item.type)}`}
-                >
-                  {item.type === "EARN"
-                    ? "+"
-                    : item.type === "REDEEM"
-                      ? "−"
-                      : "•"}
-                </Text>
-              </View>
+        renderItem={({ item }) => {
+          const positive = isPositive(item.type);
 
-              {/* Details */}
-              <View className="flex-1">
-                <Text className="text-slate-900 font-semibold text-[15px]">
-                  {getTypeLabel(item.type)}
-                </Text>
-                {item.description ? (
+          return (
+            <View className="mx-5 mb-2.5">
+              <View className="bg-white rounded-2xl px-4 py-3.5 flex-row items-center border border-slate-100">
+                {/* Icon circle */}
+                <View
+                  className={`w-10 h-10 rounded-full items-center justify-center mr-3.5 ${
+                    positive ? "bg-emerald-50" : "bg-rose-50"
+                  }`}
+                >
+                  <AntDesign
+                    name={positive ? "rise" : "fall"}
+                    size={18}
+                    color={positive ? "#059669" : "#E11D48"}
+                  />
+                </View>
+
+                {/* Details */}
+                <View className="flex-1 pr-3">
+                  <Text className="text-slate-900 font-medium text-[15px]">
+                    {positive ? "Points Earned" : "Points Redeemed"}
+                  </Text>
                   <Text
-                    className="text-slate-500 text-xs mt-0.5"
+                    className="text-slate-400 text-xs mt-0.5"
                     numberOfLines={1}
                   >
-                    {item.description}
+                    {item.description || formatDate(item.createdAt)}
                   </Text>
-                ) : (
-                  <Text className="text-slate-400 text-xs mt-0.5">
-                    {item.createdAt
-                      ? new Date(item.createdAt).toLocaleDateString(undefined, {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })
-                      : "—"}
-                  </Text>
-                )}
-              </View>
+                </View>
 
-              {/* Amount */}
-              <View className="items-end">
-                <Text
-                  className={`font-bold text-[15px] ${getTypeColor(item.type)}`}
-                >
-                  {item.type === "EARN" ? "+" : ""}
-                  {formatAmount(item.amount)}
-                </Text>
-                <Text className="text-slate-400 text-xs mt-0.5">pts</Text>
+                {/* Amount */}
+                <View className="items-end">
+                  <Text
+                    className={`font-semibold text-[15px] ${
+                      positive ? "text-emerald-600" : "text-rose-600"
+                    }`}
+                  >
+                    {positive ? "+" : ""}
+                    {formatAmount(item.amount)}
+                  </Text>
+                  <Text className="text-slate-400 text-[11px] mt-0.5">pts</Text>
+                </View>
               </View>
             </View>
-          </View>
-        )}
+          );
+        }}
         ListFooterComponent={
           txLoading ? (
-            <View className="py-8">
-              <ActivityIndicator color="#16a34a" />
+            <View className="px-5 pt-1">
+              {[1, 2, 3].map((i) => (
+                <View
+                  key={i}
+                  className="bg-white rounded-2xl px-4 py-4 mb-2.5 flex-row items-center border border-slate-100"
+                >
+                  <View className="w-10 h-10 rounded-full bg-slate-200 mr-3.5" />
+                  <View className="flex-1">
+                    <View className="h-4 w-28 bg-slate-200 rounded mb-2" />
+                    <View className="h-3 w-32 bg-slate-200 rounded" />
+                  </View>
+                  <View className="items-end">
+                    <View className="h-4 w-14 bg-slate-200 rounded mb-1.5" />
+                    <View className="h-3 w-8 bg-slate-200 rounded" />
+                  </View>
+                </View>
+              ))}
             </View>
           ) : null
         }

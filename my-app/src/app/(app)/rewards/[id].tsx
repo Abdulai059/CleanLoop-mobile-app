@@ -50,11 +50,11 @@ export default function RewardDetailScreen() {
     try {
       const redemption = await createRedemption(reward.id);
       router.replace({
-        pathname: "/(app)/rewards/success",
+        pathname: "/(app)/(modals)/redemption-success",
         params: {
           redemptionId: redemption.id,
           rewardName: reward.name,
-          pointsUsed: String(redemption.pointsUsed),
+          pointsUsed: String(redemption.pointsSpent),
           status: redemption.status,
         },
       });
