@@ -1,11 +1,19 @@
-import { View, Text, FlatList, RefreshControl } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import { useState } from "react";
+import { useRouter } from "expo-router";
 import { useWallet } from "@/hooks/useWallet";
 import { useWalletTransactions } from "@/hooks/useWalletTransactions";
 import WalletSkeleton from "@/components/ui/Skeleton/WalletSkeleton";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function WalletScreen() {
+  const router = useRouter();
   const {
     data: wallet,
     isLoading: walletLoading,
@@ -124,46 +132,63 @@ export default function WalletScreen() {
 
           return (
             <View className="mx-5 mb-2.5">
-              <View className="bg-white rounded-2xl px-4 py-3.5 flex-row items-center border border-slate-100">
-                {/* Icon circle */}
+              <TouchableOpacity
+                onPress={() => {
+                  if (item.type === "REDEEM" && item.referenceId) {
+                    router.push({
+                      pathname: "/(app)/redemptions/[redemptionId]",
+                      params: { redemptionId: item.referenceId },
+                    });
+                  }
+                }}
+                activeOpacity={0.7}
+                disabled={item.type !== "REDEEM" || !item.referenceId}
+              >
                 <View
-                  className={`w-10 h-10 rounded-full items-center justify-center mr-3.5 ${
-                    positive ? "bg-emerald-50" : "bg-rose-50"
-                  }`}
+                  className={`bg-white rounded-2xl px-4 py-3.5 flex-row items-center border border-slate-100 ${item.type === "REDEEM" && item.referenceId ? "" : "opacity-100"}`}
                 >
-                  <AntDesign
-                    name={positive ? "rise" : "fall"}
-                    size={18}
-                    color={positive ? "#059669" : "#E11D48"}
-                  />
-                </View>
-
-                {/* Details */}
-                <View className="flex-1 pr-3">
-                  <Text className="text-slate-900 font-medium text-[15px]">
-                    {positive ? "Points Earned" : "Points Redeemed"}
-                  </Text>
-                  <Text
-                    className="text-slate-400 text-xs mt-0.5"
-                    numberOfLines={1}
-                  >
-                    {item.description || formatDate(item.createdAt)}
-                  </Text>
-                </View>
-
-                {/* Amount */}
-                <View className="items-end">
-                  <Text
-                    className={`font-semibold text-[15px] ${
-                      positive ? "text-emerald-600" : "text-rose-600"
+                  {/* Icon circle */}
+                  <View
+                    className={`w-10 h-10 rounded-full items-center justify-center mr-3.5 ${
+                      positive ? "bg-emerald-50" : "bg-rose-50"
                     }`}
                   >
-                    {positive ? "+" : ""}
-                    {formatAmount(item.amount)}
-                  </Text>
-                  <Text className="text-slate-400 text-[11px] mt-0.5">pts</Text>
+                    <AntDesign
+                      name={positive ? "rise" : "fall"}
+                      size={18}
+                      color={positive ? "#059669" : "#E11D48"}
+                    />
+                  </View>
+
+                  {/* Details */}
+                  <View className="flex-1 pr-3">
+                    <Text className="text-slate-900 font-medium text-[15px]">
+                      {positive ? "Points Earned" : "Points Redeemed"}
+                    </Text>
+                    <Text
+                      className="text-slate-400 text-xs mt-0.5"
+                      numberOfLines={1}
+                    >
+                      {item.description || formatDate(item.createdAt)}
+                    </Text>
+                  </View>
+
+                  {/* Amount */}
+                  <View className="items-end">
+                    <Text
+                      className={`font-semibold text-[15px] ${
+                        positive ? "text-emerald-600" : "text-rose-600"
+                      }`}
+                    >
+                      {positive ? "+" : ""}
+                      {formatAmount(item.amount)}
+                    </Text>
+                    <Text className="text-slate-400 text-[11px] mt-0.5">
+                      pts
+                    </Text>
+                  </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
           );
         }}

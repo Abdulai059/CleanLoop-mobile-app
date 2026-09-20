@@ -22,3 +22,10 @@ export async function getMyRedemptions(): Promise<Redemption[]> {
   const { data } = await api.get("/redemptions/me");
   return data.data.redemptions;
 }
+
+export async function getRedemptionById(
+  redemptionId: string,
+): Promise<Redemption> {
+  const { data } = await api.get(`/redemptions/${redemptionId}`);
+  return data.data;
+}
