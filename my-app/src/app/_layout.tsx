@@ -1,10 +1,12 @@
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
-import { Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
+import * as Notifications from "expo-notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { registerForPushNotifications } from "@/lib/notifications";
 import "../global.css";
 
 SplashScreen.preventAutoHideAsync();
@@ -13,9 +15,44 @@ const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
 
   useEffect(() => {
     SplashScreen.hideAsync();
+  }, []);
+
+  // Push notifications
+  useEffect(() => {
+    registerForPushNotifications();
+
+    // When user taps a notification
+    const responseSub = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const data = response.notification.request.content.data as {
+          redemptionId?: string;
+          type?: string;
+        };
+
+        if (data?.redemptionId) {
+          router.push({
+            pathname: "/(app)/rewards/[id]",
+            params: { id: data.redemptionId },
+          });
+        }
+      },
+    );
+
+    // Optional: when notification arrives while app is open
+    const receivedSub = Notifications.addNotificationReceivedListener(
+      (notification) => {
+        console.log("Notification received:", notification);
+      },
+    );
+
+    return () => {
+      responseSub.remove();
+      receivedSub.remove();
+    };
   }, []);
 
   return (
@@ -38,7 +75,6 @@ export default function RootLayout() {
             headerShadowVisible: false,
           }}
         >
-          {/* The Welcome/Splash Screen */}
           <Stack.Screen
             name="index"
             options={{
@@ -52,12 +88,8 @@ export default function RootLayout() {
             }}
           />
 
-          {/* Auth group (login, signup) */}
           <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-
           <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-
-          {/* App group — protected routes */}
           <Stack.Screen name="(app)" options={{ headerShown: false }} />
         </Stack>
       </QueryClientProvider>

@@ -10,6 +10,7 @@ export type Redemption = {
     id: string;
     name: string;
     pointsCost: number;
+    imageUrl?: string | null;
   };
 };
 

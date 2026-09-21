@@ -1,14 +1,17 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "Plastic Pickup",
+    "slug": "Plastic Pickup",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "infoPlist": {
+        "UIBackgroundModes": ["remote-notification"]
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +20,8 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "useNextNotificationsApi": true
     },
     "web": {
       "output": "static",
@@ -33,8 +37,19 @@
           "imageWidth": 76
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "color": "#16a34a"
+        }
+      ]
     ],
+    "extra": {
+      "eas": {
+        "projectId": "YOUR_EAS_PROJECT_ID"
+      }
+    },
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
