@@ -3,19 +3,14 @@ import { api } from "./api";
 
 export type User = {
   id: string;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   phone: string;
-  email: string;
-  gender: string;
+  email: string | null;
+  gender: string | null;
   status: string;
-  dateOfBirth: string;
+  dateOfBirth: string | null;
   profilePhotoUrl: string | null;
-  regionId: string | null;
-  districtId: string | null;
-  communityId: string | null;
-  createdAt: string;
-  updatedAt: string;
   region: { id: string; name: string } | null;
   district: { id: string; name: string } | null;
   community: { id: string; name: string } | null;
@@ -27,7 +22,20 @@ export async function getMe(): Promise<User> {
   return data.data.user;
 }
 
-export async function updateMe(payload: Partial<User>): Promise<User> {
+export async function updateMe(
+  payload: Partial<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+    gender: string;
+    dateOfBirth: string;
+    profilePhotoUrl: string;
+    regionId: string;
+    districtId: string;
+    communityId: string;
+  }>,
+): Promise<User> {
   const { data } = await api.patch("/users/updateMe", payload);
   return data.data.user;
 }

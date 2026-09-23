@@ -4,11 +4,13 @@ export default function ModalsLayout() {
   return (
     <Stack
       screenOptions={{
-        presentation: "modal",
+        presentation: "formSheet",
         headerShown: false,
+        sheetAllowedDetents: [0.5, 1],
+        sheetExpandsWhenScrolledToEdge: true,
       }}
     >
-      <Stack.Screen name="record-recovery" />
+      <Stack.Screen name="redemption-success" />
     </Stack>
   );
 }

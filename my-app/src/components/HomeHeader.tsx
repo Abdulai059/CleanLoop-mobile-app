@@ -5,11 +5,7 @@ import { useMe } from "@/hooks/useMe";
 export default function HomeHeader() {
   const { data: user, isLoading } = useMe();
 
-  const displayName = isLoading
-    ? "..."
-    : user
-      ? `${user.firstName}`.trim()
-      : "Guest";
+  const displayName = isLoading ? "..." : user?.firstName?.trim() || "Guest";
 
   return (
     <View className="flex-row justify-between items-center mb-5">
